@@ -1,19 +1,19 @@
 version: 2.1
-orbs: 
-  slack: circleci/slack@4.10.1
+# orbs: 
+#   slack: circleci/slack@4.10.1
 
-commands:
-  notify_slack_error:
-    steps:
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
+# commands:
+#   notify_slack_error:
+#     steps:
+#       - slack/notify:
+#           event: fail
+#           template: basic_fail_1
 
-  notify_slack_pass:
-    steps:
-      - slack/notify:
-          event: pass
-          template: basic_success_1
+#   notify_slack_pass:
+#     steps:
+#       - slack/notify:
+#           event: pass
+#           template: basic_success_1
 
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
@@ -65,8 +65,8 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
-      - notify_slack_error
-      - notify_slack_pass
+      # - notify_slack_error
+      # - notify_slack_pass
 
   build-backend:
     docker:
@@ -84,8 +84,8 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
-      - notify_slack_error
-      - notify_slack_pass          
+      # - notify_slack_error
+      # - notify_slack_pass          
 
   test-frontend:
     docker:
@@ -103,8 +103,8 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-test
-      - notify_slack_error
-      - notify_slack_pass                  
+      # - notify_slack_error
+      # - notify_slack_pass                  
                 
   test-backend:
     docker:
@@ -238,8 +238,8 @@ jobs:
           paths:
             - project/backend/.env           
       - destroy-environment
-      - notify_slack_error
-      - notify_slack_pass
+      # - notify_slack_error
+      # - notify_slack_pass
 
 #       # Here's where you will add some code to rollback on failure      
 
