@@ -28,7 +28,7 @@ commands:
           command: |
             if aws s3api head-bucket --bucket udapeople-franklin-mutua-<< parameters.Workflow_ID >>
               then
-                aws s3 rm s3://udapeople-franklin-mutua<< parameters.Workflow_ID >> --recursive
+                aws s3 rm s3://udapeople-franklin-mutua-<< parameters.Workflow_ID >> --recursive
               else
                 echo "Bucket empty or doesn't exist"
             fi
