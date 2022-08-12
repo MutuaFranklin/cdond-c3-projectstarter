@@ -16,18 +16,28 @@ commands:
 #           template: basic_success_1
 
   destroy-environment:
-    description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+    description: Destroy infrastructure.
     parameters:
-      # Add parameter here   
+      Workflow_ID:
+        type: string
+        default: ${CIRCLE_WORKFLOW_ID:0:7}
     steps:
       - run:
-          name: Destroy environments
+          name: Delete Bucket Files
           when: on_fail
           command: |
-            echo "Destroying environment: ${CIRCLE_WORKFLOW_ID:0:7}"
-            aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-            aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
-            aws cloudformation delete-stack --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
+            if aws s3api head-bucket --bucket udapeople-franklin-mutua-<< parameters.Workflow_ID >>
+              then
+                aws s3 rm s3://udapeople-franklin-mutua<< parameters.Workflow_ID >> --recursive
+              else
+                echo "Bucket empty or doesn't exist"
+            fi
+      - run:
+          name: Destroy Environments
+          when: on_fail
+          command: |
+            aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.Workflow_ID >>
+            aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.Workflow_ID >>
             
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
@@ -488,7 +498,7 @@ workflows:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           filters:
             branches:
-              only: [main]          
+              only: [mastergit]          
       - configure-infrastructure:
           requires: [deploy-infrastructure]
       - run-migrations:
