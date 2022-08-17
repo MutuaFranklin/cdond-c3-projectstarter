@@ -70,11 +70,11 @@ commands:
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
-      # Add parameter here     
+      # Add parameter here..    
     steps:
       - run:
           name: Revert migrations
-          # Add when this will run
+          # Add when this will ..
           when: on_fail
           command: |
             SUCCESS=$(curl --insecure  https://kvdb.io/${USER_BUCKET_ID}/migration_${CIRCLE_WORKFLOW_ID:0:7})
@@ -294,6 +294,7 @@ jobs:
             then
               curl --insecure https://kvdb.io/Vt36VAk7u6JxjmJRWfyFxR/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
+            
 
       - destroy-environment
       - revert-migrations
